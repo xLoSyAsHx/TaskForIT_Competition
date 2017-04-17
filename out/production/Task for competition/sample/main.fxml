@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="376.0" minWidth="625.0" prefHeight="401.0" prefWidth="625.0"  xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
+   <children>
+      <AnchorPane prefHeight="388.0" prefWidth="171.0">
+         <children>
+            <TableView fx:id="dataTable" prefWidth="171.0">
+              <columns>
+                <TableColumn fx:id="leftColumn" prefWidth="83.0" text="Time" />
+                <TableColumn fx:id="rightColumn" prefWidth="86.0" text="Degree" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="171.0" prefHeight="400.0" prefWidth="454.0">
+         <children>
+            <Text layoutX="153.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="123.13671875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <RadioButton fx:id="autoUpdateButton" layoutX="175.0" layoutY="342.0" mnemonicParsing="false" onAction="#handleAutoUpdate" text="Auto update" />
+            <Button layoutX="313.0" layoutY="338.0" mnemonicParsing="false" onAction="#handleSaveAsExcelFile" prefHeight="25.0" prefWidth="118.0" text="Save as excel file" />
+            <Text layoutX="126.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data from" />
+            <Text layoutX="188.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.1.2017" />
+            <Text layoutX="240.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" />
+            <Text layoutX="265.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.1.2017" />
+            <Button layoutX="23.0" layoutY="338.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="25.0" prefWidth="107.0" text="Settings" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
