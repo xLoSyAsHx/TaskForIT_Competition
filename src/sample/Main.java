@@ -1,18 +1,16 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.util.prefs.Preferences;
+import java.time.LocalDate;
+import java.util.HashMap;
 
 public class Main extends Application {
 
@@ -50,7 +48,6 @@ public class Main extends Application {
         }
     }
 
-
     public void show() {
         try {
             // Загружаем сведения об адресатах.
@@ -68,8 +65,7 @@ public class Main extends Application {
         }
     }
 
-
-    public boolean showChartSettingsDialog(Settings settings) {
+    public boolean showChartSettingsDialog(HashMap<LocalDate, Double> _dateVal) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("ChartSettings.fxml"));
@@ -84,12 +80,11 @@ public class Main extends Application {
 
             ChartSettingsController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setSettings(settings);
             controller.init();
 
             dialogStage.showAndWait();
             if (controller.isApplyChangesClicked()){
-                settings = controller.getSettings();
+                _dateVal = controller.getValues();
                 return true;
             }
             return false;
@@ -99,96 +94,6 @@ public class Main extends Application {
         }
     }
 
-    /**
-     * Получить путь до последнего сохранения
-     * @return
-     */
-    public File getFilePath() {
-        Preferences prefs = Preferences.userNodeForPackage(Main.class);
-        String filePath = prefs.get("filePath", null);
-        if (filePath != null) {
-            return new File(filePath);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Установить путь последнего сохранения
-     * @param
-     */
-    public void setFilePath(File file) {
-        Preferences prefs = Preferences.userNodeForPackage(Main.class);
-        if (file != null) {
-            prefs.put("filePath", file.getPath());
-
-            // Обновление заглавия сцены.
-            primaryStage.setTitle("AddressApp - " + file.getName());
-        } else {
-            prefs.remove("filePath");
-
-            // Обновление заглавия сцены.
-            primaryStage.setTitle("AddressApp");
-        }
-    }
-
-    /**
-     * Загружает информацию об адресатах из указанного файла.
-     * Текущая информация об адресатах будет заменена.
-     *
-     * @param file
-     */
-    public void loadDataFromFile(File file) {
-
-        try
-        {
-
-        }
-        catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not load data");
-            alert.setContentText("Could not load data to file:\n" + file.getPath());
-
-            alert.showAndWait();
-        }
-    }
-
-    /**
-     * Сохраняет текущую информацию об адресатах в указанном файле.
-     *
-     * @param file
-     */
-    public void saveDataToFile(File file) {
-
-        try
-        {
-
-        }
-        catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Could not save data");
-            alert.setContentText("Could not save data to file:\n" + file.getPath());
-
-            alert.showAndWait();
-        }
-    }
-
-
-    /**
-     * Возвращает главную сцену.
-     * @return
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    /*
-    public ObservableList<Machine> getMachineData() {
-        return machineData;
-    }
-*/
     public void setTitle(String title){
         primaryStage.setTitle(title);
     }
