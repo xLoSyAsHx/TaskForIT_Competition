@@ -85,6 +85,7 @@ public class Main extends Application {
             ChartSettingsController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setSettings(settings);
+            controller.init();
 
             dialogStage.showAndWait();
             if (controller.isApplyChangesClicked()){

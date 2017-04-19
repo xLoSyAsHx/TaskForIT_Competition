@@ -1,44 +1,37 @@
 package sample;
 
-import java.time.LocalDate;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by User on 17.04.2017.
  */
 public class Settings {
-    private Vector<String> dataTypes;
-    private Vector<String> regions;
-    private Vector<String> controllerTypes;
-    private Vector<LocalDate> times;
 
-    public Settings(Vector<String> dataTypes, Vector<String> regions, Vector<String> controllerTypes, Vector<LocalDate> times) {
-        this.dataTypes = dataTypes;
-        this.regions = regions;
-        this.controllerTypes = controllerTypes;
-        this.times = times;
+    private HashMap<String, HashMap<String, HashMap<String, String[]>>> setFromTyteToDistrict;
+
+    // { type(Temperature, ...): { region(NijObl, ...): { city(NN, ...): [ VerhPechery, Avtaz, ... ] } } }
+    // type == types in dialog
+
+    public Settings(HashMap<String, HashMap<String, HashMap<String, String[]>>> setFromTyteToDistrict) {
+        this.setFromTyteToDistrict = setFromTyteToDistrict;
     }
 
-    public Vector<String> getDataTypes() {
-        return dataTypes;
+    public Set<String> getAvalibleControllerTypes(){
+        return setFromTyteToDistrict.keySet();
     }
 
-    public Vector<String> getRegions() {
-        return regions;
+    public String[] getAvalibleRegions(String type){
+        return setFromTyteToDistrict.get(type).keySet().toArray(new String[setFromTyteToDistrict.get(type).size()]);
     }
 
-    public Vector<String> getControllerTypes() {
-        return controllerTypes;
+    public String[] getAvalibleCities(String type, String region){
+        return setFromTyteToDistrict.get(type).get(region).keySet().toArray(
+                new String[setFromTyteToDistrict.get(type).get(region).size()]
+        );
     }
 
-    public Vector<LocalDate> getTimes() {
-        return times;
-    }
-
-    public void set(Vector<String> dataTypes, Vector<String> regions, Vector<String> controllerTypes, Vector<LocalDate> times) {
-        this.dataTypes = dataTypes;
-        this.regions = regions;
-        this.controllerTypes = controllerTypes;
-        this.times = times;
+    public String[] getAvalibleDistricts(String type, String region, String city){
+        return setFromTyteToDistrict.get(type).get(region).get(city);
     }
 }

@@ -12,6 +12,18 @@ public class CountersDate {
     public HashMap<LocalDate, Double> timestamp;
     public HashMap<String, String> meta;
 
+    public CountersDate(LocalDate starttime, HashMap<LocalDate, Double> timestamp, HashMap<String, String> meta) {
+        this.starttime = starttime;
+        this.timestamp = timestamp;
+        this.meta = meta;
+    }
+
+    public void set(LocalDate starttime, HashMap<LocalDate, Double> timestamp, HashMap<String, String> meta) {
+        this.starttime = starttime;
+        this.timestamp = timestamp;
+        this.meta = meta;
+    }
+
     public Set<LocalDate> getTimes(){
         return timestamp.keySet();
     }
