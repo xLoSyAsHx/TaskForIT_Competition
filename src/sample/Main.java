@@ -16,6 +16,8 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private Settings settings;
+    private HashMap<LocalDate, Double> dateVal;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -80,11 +82,13 @@ public class Main extends Application {
 
             ChartSettingsController controller = loader.getController();
             controller.setDialogStage(dialogStage);
+            controller.setSettings(settings);
             controller.init();
 
             dialogStage.showAndWait();
             if (controller.isApplyChangesClicked()){
                 _dateVal = controller.getValues();
+                settings = controller.getSettings();
                 return true;
             }
             return false;

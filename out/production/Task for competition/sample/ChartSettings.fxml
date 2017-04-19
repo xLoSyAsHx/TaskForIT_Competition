@@ -6,6 +6,7 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,62 +15,85 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ChartSettingsController">
+<AnchorPane maxHeight="470.0" maxWidth="700.0" minHeight="415.0" minWidth="700.0" prefHeight="470.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ChartSettingsController">
    <children>
-      <Text layoutX="198.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set filters" textAlignment="CENTER" wrappingWidth="107.177734375">
+      <Text layoutX="206.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set filters" textAlignment="CENTER" wrappingWidth="107.177734375" AnchorPane.leftAnchor="290.0" AnchorPane.rightAnchor="290.0">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <GridPane layoutX="39.0" layoutY="177.0">
+      <GridPane layoutX="30.0" layoutY="177.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="130.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="160.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="160.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="160.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <MenuButton fx:id="mb_ChangeControllerLocation" mnemonicParsing="false" text="Change controller location" GridPane.rowIndex="1">
+            <MenuButton fx:id="mb_IndoorOutdoor" mnemonicParsing="false" prefWidth="175.0" text="Change controller type" GridPane.rowIndex="2">
                <items>
-                  <MenuItem mnemonicParsing="false" text="На улице" />
-                  <MenuItem mnemonicParsing="false" text="Внутри помещения" />
+                  <MenuItem mnemonicParsing="false" text="Outdoors" />
+                  <MenuItem mnemonicParsing="false" text="Indoors" />
                </items>
             </MenuButton>
-            <MenuButton fx:id="mb_ChangeDistrict" mnemonicParsing="false" text="Change district" GridPane.columnIndex="2">
+            <MenuButton fx:id="mb_ChangeControllerLocation" mnemonicParsing="false" prefWidth="175.0" text="Change controller location" GridPane.rowIndex="1">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Нижегородский" />
-                  <MenuItem mnemonicParsing="false" text="Советский" />
-                  <MenuItem mnemonicParsing="false" text="Канавинский" />
+                  <MenuItem mnemonicParsing="false" text="Нижний Новгоод - Нижегородский" />
+                  <MenuItem mnemonicParsing="false" text="Нижний Новгоод - Советский" />
+                  <MenuItem mnemonicParsing="false" text="Нижний Новгоод - Канавинский" />
                   <MenuItem mnemonicParsing="false" text="Сормовский" />
-                  <MenuItem mnemonicParsing="false" text="Автозаводский" />
-               </items>
-            </MenuButton>
-            <MenuButton fx:id="mb_ChangeRegion" mnemonicParsing="false" text="Change region">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Нижегородская область" />
-               </items>
-            </MenuButton>
-            <MenuButton fx:id="mb_ChangeCity" mnemonicParsing="false" text="Change city" GridPane.columnIndex="1">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Нижний Новгород" />
+                  <MenuItem mnemonicParsing="false" text="Нижний Новгоод - Автозаводский" />
                   <MenuItem mnemonicParsing="false" text="Держинск" />
                   <MenuItem mnemonicParsing="false" text="Бор" />
                </items>
             </MenuButton>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Область" GridPane.columnIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Район" GridPane.columnIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Город" GridPane.columnIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="t_city" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="120.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="t_region" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="t_district" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
          </children>
       </GridPane>
-      <GridPane layoutX="52.0" layoutY="267.0">
+      <GridPane layoutX="87.0" layoutY="267.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -78,8 +102,8 @@
                   <Font size="18.0" />
                </font>
             </Text>
-            <DatePicker GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <DatePicker GridPane.rowIndex="2" />
+            <DatePicker fx:id="dp_To" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dp_From" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="From" textAlignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
@@ -90,24 +114,38 @@
                   <Font size="14.0" />
                </font>
             </Text>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="3">
+              <buttons>
+                  <TextField fx:id="tf_f_hr" />
+                  <TextField fx:id="tf_f_min" />
+                  <TextField fx:id="tf_f_sec" />
+              </buttons>
+            </ButtonBar>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+               <buttons>
+                  <TextField fx:id="tf_t_hr" />
+                  <TextField fx:id="tf_t_min" />
+                  <TextField fx:id="tf_t_sec" />
+               </buttons>
+            </ButtonBar>
          </children>
       </GridPane>
-      <Text layoutX="166.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chart settings" textAlignment="CENTER">
+      <Text layoutX="270.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chart settings" textAlignment="CENTER" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="283.5859375">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="201.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data type" textAlignment="CENTER">
+      <Text layoutX="305.0" layoutY="85.0" strokeWidth="0.0" text="Data type" textAlignment="CENTER" AnchorPane.leftAnchor="305.0" AnchorPane.rightAnchor="318.2275390625">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <GridPane layoutX="10.0" layoutY="90.0" prefHeight="30.0" prefWidth="483.0">
+      <GridPane layoutX="64.0" layoutY="91.0" prefHeight="30.0" prefWidth="483.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="65.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -119,12 +157,12 @@
             <RadioButton fx:id="rb_Concentration_of_CO2" mnemonicParsing="false" text="Concentration of CO2" GridPane.columnIndex="3" />
          </children>
       </GridPane>
-      <ButtonBar layoutX="269.0" layoutY="373.0" prefHeight="40.0" prefWidth="220.0">
+      <ButtonBar layoutX="466.0" layoutY="416.0" prefHeight="40.0" prefWidth="220.0">
         <buttons>
-          <Button mnemonicParsing="false" onAction="#handleApplyChanges" text="Apply changes" />
+          <Button fx:id="b_Apply" mnemonicParsing="false" onAction="#handleApplyChanges" text="Apply changes" />
             <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
         </buttons>
       </ButtonBar>
-      <Line endX="503.0" layoutY="370.0" />
+      <Line endX="700.0" layoutY="415.0" />
    </children>
 </AnchorPane>
