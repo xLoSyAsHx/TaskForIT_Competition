@@ -2,6 +2,8 @@ package sample;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -10,24 +12,27 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 
 public class MainController {
-    HashMap<LocalDate, Double> dateVal;
-    Timeline timeline;
+    HashMap<LocalDateTime, Double> dateVal;
+    ObservableList<DataValue> listForTable = FXCollections.observableArrayList();
+    XYChart.Series series = new XYChart.Series();
     int a = 1;
 
     @FXML
-    private TableView<HashMap<LocalDate, Double>> dataTable;
+    private TableView<DataValue> dataTable;
     @FXML
-    private TableColumn<HashMap<LocalDate, Double>, String> leftColumn;
+    private TableColumn<DataValue, LocalDateTime> leftColumn;
     @FXML
-    private TableColumn<HashMap<LocalDate, Double>, String> rightColumn;
+    private TableColumn<DataValue, Double> rightColumn;
     @FXML
     private RadioButton autoUpdateButton;
     @FXML
-    private LineChart<LocalDate, Double> lineChart;
+    private LineChart<LocalDateTime, Double> lineChart;
 
 
     // Reference to the main application.
@@ -41,94 +46,41 @@ public class MainController {
 
     @FXML
     private void initialize() {
-
-        lineChart.setTitle("Stock Monitoring, 2010");
-
-        XYChart.Series series = new XYChart.Series();
-        series.setName("My portfolio");
-
-        series.getData().add(new XYChart.Data("Jan", 23));
-        series.getData().add(new XYChart.Data("Feb", 14));
-        series.getData().add(new XYChart.Data("Mar", 15));
-        series.getData().add(new XYChart.Data("Apr", 24));
-        series.getData().add(new XYChart.Data("May", 34));
-        series.getData().add(new XYChart.Data("Jun", 36));
-        series.getData().add(new XYChart.Data("Jul", 22));
-        series.getData().add(new XYChart.Data("Aug", 45));
-        series.getData().add(new XYChart.Data("Sep", 43));
-        series.getData().add(new XYChart.Data("Oct", 17));
-        series.getData().add(new XYChart.Data("Nov", 29));
-        series.getData().add(new XYChart.Data("Dec", 25));
-
-        lineChart.getData().add(series);
-        //
-
-
-        series = new XYChart.Series();
-        series.setName("My portfolio2");
-
-        series.getData().add(new XYChart.Data("Jan", 11));
-        series.getData().add(new XYChart.Data("Feb", 12));
-        series.getData().add(new XYChart.Data("Mar", 13));
-        series.getData().add(new XYChart.Data("Apr", 24));
-        series.getData().add(new XYChart.Data("May", 10));
-        series.getData().add(new XYChart.Data("Jun", 22));
-        series.getData().add(new XYChart.Data("Jul", 24));
-        series.getData().add(new XYChart.Data("Aug", 28));
-        series.getData().add(new XYChart.Data("Sep", 35));
-        series.getData().add(new XYChart.Data("Oct", 37));
-        series.getData().add(new XYChart.Data("Nov", 36));
-        series.getData().add(new XYChart.Data("Dec", 35));
-
-        lineChart.getData().add(series);
-
-        /*
-        updateData();
-        fillDataInTable();
-        */
-
-        timeline = new Timeline (
-                new KeyFrame(
-                        Duration.millis(1000 * 2), //1000 мс * 30 = 30 сек
-                        ae -> {
-                            updateData();
-                            mainApp.setTitle("NEW TITLE!!!" + a);
-                            a++;
-                            timeline.playFromStart();
-                        }
-                )
-        );
-
-        //timeline.setAutoReverse(true);
-        timeline.playFromStart(); //Запускаем
+        leftColumn.setCellValueFactory(cellData -> cellData.getValue().getDTProp());
+        rightColumn.setCellValueFactory(cellData -> cellData.getValue().getValProp().asObject());
     }
 
 
     @FXML
     private void handleSettings() {
-        boolean saveClicked = mainApp.showChartSettingsDialog(dateVal);
+        boolean saveClicked = mainApp.showChartSettingsDialog();
         if (saveClicked) {
-            updateDataInTable();
+            updateData();
+            dateVal = mainApp.getDateVal();
+            updateData();
         }
     }
 
-    //Получаем данные с сервера
     public void updateData(){
         if (dateVal != null)
             return;
-    }
 
-    public void updateDataInTable(){
+        lineChart.setTitle(mainApp.getSettings().getControllerType());
+        lineChart.getData().clear();
+
+        series = new XYChart.Series();
+        for (LocalDateTime localDateTime : mainApp.getDateVal().keySet())
+            series.getData().add(new XYChart.Data(localDateTime.toString(), 23));
+        lineChart.getData().add(series);
+
         dataTable.getItems().removeAll();
+        listForTable.removeAll();
         fillDataInTable();
     }
 
-    //Инициализируем таблицу данными, полученными с сервера
     private void fillDataInTable(){
-        for (LocalDate time : dateVal.keySet())
-        {
-            leftColumn.setCellValueFactory(new PropertyValueFactory<>(time.toString()));
-            rightColumn.setCellValueFactory(new PropertyValueFactory<>(dateVal.get(time).toString()));
-        }
+        for (LocalDateTime time : dateVal.keySet())
+            listForTable.add(new DataValue(time, dateVal.get(time)));
+        dataTable.setItems(listForTable);
     }
 }

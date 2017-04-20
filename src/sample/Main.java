@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class Main extends Application {
@@ -17,7 +18,7 @@ public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
     private Settings settings;
-    private HashMap<LocalDate, Double> dateVal;
+    private HashMap<LocalDateTime, Double> dateVal;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -67,7 +68,7 @@ public class Main extends Application {
         }
     }
 
-    public boolean showChartSettingsDialog(HashMap<LocalDate, Double> _dateVal) {
+    public boolean showChartSettingsDialog() {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Main.class.getResource("ChartSettings.fxml"));
@@ -87,7 +88,7 @@ public class Main extends Application {
 
             dialogStage.showAndWait();
             if (controller.isApplyChangesClicked()){
-                _dateVal = controller.getValues();
+                dateVal = controller.getValues();
                 settings = controller.getSettings();
                 return true;
             }
@@ -100,6 +101,14 @@ public class Main extends Application {
 
     public void setTitle(String title){
         primaryStage.setTitle(title);
+    }
+
+    public HashMap<LocalDateTime, Double> getDateVal() {
+        return dateVal;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     public static void main(String[] args) {

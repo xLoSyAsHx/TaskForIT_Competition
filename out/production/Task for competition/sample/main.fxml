@@ -7,33 +7,22 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="500.0" maxWidth="700.0" minHeight="500.0" minWidth="700.0" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
+<AnchorPane maxHeight="450.0" maxWidth="700.0" minHeight="450.0" minWidth="700.0" prefHeight="450.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
    <children>
       <AnchorPane prefHeight="388.0" prefWidth="171.0">
          <children>
-            <TableView fx:id="dataTable" maxHeight="500.0" maxWidth="200.0" minHeight="500.0" minWidth="200.0" prefHeight="500.0" prefWidth="200.0">
+            <TableView fx:id="dataTable" maxHeight="450.0" maxWidth="230.0" minHeight="450.0" minWidth="230.0" prefHeight="450.0" prefWidth="230.0">
               <columns>
-                <TableColumn fx:id="leftColumn" prefWidth="100.0" text="Time" />
-                <TableColumn fx:id="rightColumn" prefWidth="100.0" text="Degree" />
+                <TableColumn fx:id="leftColumn" prefWidth="150.0" text="Time" />
+                <TableColumn fx:id="rightColumn" prefWidth="100.0" text="Val" />
               </columns>
             </TableView>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="171.0" prefHeight="400.0" prefWidth="454.0">
          <children>
-            <Text layoutX="153.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" textAlignment="CENTER" wrappingWidth="123.13671875">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Text layoutX="126.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data from" />
-            <Text layoutX="188.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.1.2017" />
-            <Text layoutX="240.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" />
-            <Text layoutX="265.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1.1.2017" />
-            <LineChart fx:id="lineChart" layoutX="45.0" layoutY="87.0" prefHeight="350.0" prefWidth="472.0">
+            <LineChart fx:id="lineChart" layoutX="63.0" layoutY="58.0" prefHeight="351.0" prefWidth="463.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -43,6 +32,6 @@
             </LineChart>
          </children>
       </AnchorPane>
-      <Button layoutX="243.0" layoutY="449.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="25.0" prefWidth="107.0" text="Settings" />
+      <Button layoutX="243.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleSettings" prefHeight="25.0" prefWidth="107.0" text="Settings" />
    </children>
 </AnchorPane>

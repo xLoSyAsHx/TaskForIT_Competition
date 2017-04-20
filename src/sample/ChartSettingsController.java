@@ -1,5 +1,7 @@
 package sample;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -9,14 +11,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Vector;
+import java.time.ZoneOffset;
+import java.util.*;
 
 
 public class ChartSettingsController {
@@ -25,9 +31,10 @@ public class ChartSettingsController {
     private boolean saveChanges = false;
     final ToggleGroup radioButtonGroup = new ToggleGroup();
     String currentControllerType = null;
-    Integer controllerLocation;
+    Integer controllerLocation = null;
+    Boolean toWasChoosed = false, fromWasChoosed = false;
 
-    HashMap<LocalDate, Double> dateVal = null;
+    HashMap<LocalDateTime, Double> dateVal = null;
     Settings settings = null;
 
 
@@ -100,6 +107,7 @@ public class ChartSettingsController {
         list = mb_IndoorOutdoor.getItems();
         for (MenuItem item : list) {
             item.setOnAction(e -> {
+                            //controllerLocation = mb_ChangeControllerLocation.getItems().indexOf(item);
                             mb_IndoorOutdoor.setText("Controller type: " + item.getText());
                     }
             );
@@ -135,6 +143,66 @@ public class ChartSettingsController {
         tf_t_sec.setDisable(false);
     }
 
+    private HashMap<LocalDateTime, Double> sendPostRequest(char kind_typename, int location_id, int deployment_id, long time_start, long time_end) {
+        PostedData dataObj = new PostedData(kind_typename, location_id, deployment_id, time_start, time_end);
+        Gson gson = new Gson();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        String responseString = null;
+        try {
+            HttpPost request = new HttpPost("http://91.215.169.120:9000/drop_jsons/request_post/");
+            StringEntity params = new StringEntity(gson.toJson(dataObj));
+
+            // передаём данные на сервер
+            request.setEntity(params);
+
+//        request.setHeader("Content-type", "application/json");
+
+            // ждём ответ
+            HttpResponse response = httpClient.execute(request);
+
+            // обработка ответа сервера
+            responseString = new BasicResponseHandler().handleResponse(response);
+
+            // ecли пришёл пустой ответ
+            if (responseString.length() <= 2) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("No data");
+                alert.setContentText("There is no data for your request. Try to change the settings.");
+                alert.showAndWait();
+                saveChanges = false;
+                return null;
+            }
+        }
+        catch (Exception ex) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("No data");
+            alert.setContentText("There is no data for your request. Try to change the settings.");
+            alert.showAndWait();
+            saveChanges = false;
+        }
+
+        // достаём данные из json в HashMap
+        HashMap<String, Double> map = gson.fromJson(responseString, new TypeToken<HashMap<String, Double>>() {
+        }.getType());
+
+        HashMap<LocalDateTime, Double> result = new HashMap<>();
+
+        // преобразуем String к LocalDateTime и заносим в новый HashMap
+        Iterator itr = map.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, Double> pair = (Map.Entry)itr.next();
+            LocalDateTime dateKey = LocalDateTime.ofEpochSecond(Long.valueOf(pair.getKey()), 0, ZoneOffset.UTC);
+            result.putIfAbsent(dateKey, pair.getValue());
+            itr.remove();
+        }
+
+
+        return  result;
+    }
+
+
 
     @FXML
     private void handleApplyChanges() {
@@ -158,11 +226,11 @@ public class ChartSettingsController {
         {
             case "Temperature": kind = 't'; settingsKind = "Temperature"; break;
             case "Humidity": kind = 'h'; settingsKind = "Humidity"; break;
-            case "Illumination": kind = 'i'; settingsKind = "Illumination"; break;
+            case "Illumination": kind = 'l'; settingsKind = "Illumination"; break;
             case "Concentration of CO2": kind = 'c'; settingsKind = "Concentration of CO2"; break;
         }
 
-        indoorOutdoor = mb_IndoorOutdoor.getText().equals("Indoors") ? 1 : 0;
+        indoorOutdoor = mb_IndoorOutdoor.getText().equals("Controller type: Indoors") ? 0 : 1;
 
 
         try {
@@ -172,6 +240,13 @@ public class ChartSettingsController {
             t_hr = Integer.parseInt(!tf_t_hr.getText().isEmpty() ? tf_t_hr.getText() : "0");
             t_min = Integer.parseInt(!tf_t_min.getText().isEmpty() ? tf_t_min.getText() : "0");
             t_sec = Integer.parseInt(!tf_t_sec.getText().isEmpty() ? tf_t_sec.getText() : "0");
+
+
+            LocalTime time = LocalTime.of(f_hr, f_min, f_sec);
+            from = LocalDateTime.of(dp_From.getValue(), time);
+
+            time = LocalTime.of(t_hr, t_min, t_sec);
+            to = LocalDateTime.of(dp_To.getValue(), time);
 
         }
         catch (Exception e){
@@ -183,14 +258,11 @@ public class ChartSettingsController {
             saveChanges = false;
             return;
         }
-            LocalTime time = LocalTime.of(f_hr, f_min, f_sec);
-            from = LocalDateTime.of(dp_From.getValue(), time);
-
-            time = LocalTime.of(t_hr, t_min, t_sec);
-            to = LocalDateTime.of(dp_From.getValue(), time);
 
 
-        if (to.isBefore(from)){
+
+
+        if (to.isBefore(from) || !toWasChoosed || !fromWasChoosed){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Wrong period");
@@ -205,25 +277,11 @@ public class ChartSettingsController {
         settings =  new Settings(settingsKind, controllerLocation, indoorOutdoor,
                 from.toLocalDate(), f_hr, f_min, f_sec,
                 to.toLocalDate(), t_hr, t_min, t_sec);
-        //
-        /*
-        //
-        //Здесь должен быть напрос на сервер и запись ответа в dateVal
-        //
-        if (данные пришли)
-        {
-            settings =  new Settings(settingsKind, controllerLocation, indoorOutdoor, from, to);
 
-            запись ответа в dateVal
-        }
-        else { // иначе, здесь будет выведено сообщение о том, какой запрост предлагает сервер
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText();
-            alert.setHeaderText();
-            alert.setTitle();
-            saveChanges = true;
-        }
-        */
+        dateVal = sendPostRequest(kind, controllerLocation + 1, indoorOutdoor + 1, from.toEpochSecond(ZoneOffset.UTC), to.toEpochSecond(ZoneOffset.UTC));
+
+        if (dateVal == null)
+            return;
 
         dialogStage.close();
     }
@@ -243,6 +301,20 @@ public class ChartSettingsController {
         initMenuItems();
 
         disableAllAboveType();
+
+        dp_From.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fromWasChoosed = true;
+            }
+        });
+
+        dp_To.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                toWasChoosed = true;
+            }
+        });
 
         radioButtonGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
@@ -301,7 +373,7 @@ public class ChartSettingsController {
         }
     }
 
-    public HashMap<LocalDate, Double> getValues(){
+    public HashMap<LocalDateTime, Double> getValues(){
         return dateVal;
     }
 

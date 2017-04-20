@@ -37,8 +37,8 @@
          <children>
             <MenuButton fx:id="mb_IndoorOutdoor" mnemonicParsing="false" prefWidth="175.0" text="Change controller type" GridPane.rowIndex="2">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Outdoors" />
                   <MenuItem mnemonicParsing="false" text="Indoors" />
+                  <MenuItem mnemonicParsing="false" text="Outdoors" />
                </items>
             </MenuButton>
             <MenuButton fx:id="mb_ChangeControllerLocation" mnemonicParsing="false" prefWidth="175.0" text="Change controller location" GridPane.rowIndex="1">
